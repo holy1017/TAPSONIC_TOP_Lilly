@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TAPSONIC_TOP_Lilly", "TAPSONIC_TOP_Lilly\TAPSONIC_TOP_Lilly.csproj", "{09DBAD0F-F503-473C-BB41-DD590621285D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{09DBAD0F-F503-473C-BB41-DD590621285D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09DBAD0F-F503-473C-BB41-DD590621285D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09DBAD0F-F503-473C-BB41-DD590621285D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09DBAD0F-F503-473C-BB41-DD590621285D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E6AE4C9-DA03-4F61-9287-E728C6D1CCB1}
+	EndGlobalSection
+EndGlobal
