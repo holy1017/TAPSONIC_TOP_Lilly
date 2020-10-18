@@ -17,8 +17,8 @@ namespace TAPSONIC_TOP_Lilly
         static int grp_w = time_song* time_px;// 그래픽 크기
         static int grp_h_div = 1;//그래픽 배율 감소
         static int grp_h = 600;// 그래픽 크기
-        static int[] buff_vall = Enumerable.Repeat(0, time_song).ToArray();
-        static int[] buff_v = Enumerable.Repeat(0, time_song).ToArray();
+        static int[] buff_vall = Enumerable.Repeat(100, time_song).ToArray();
+        static int[] buff_v = Enumerable.Repeat(100, time_song).ToArray();
         static bool[] buff_c = Enumerable.Repeat(false, time_song).ToArray();
         static int sum = 0;// 그래픽 크기
 
@@ -89,27 +89,76 @@ namespace TAPSONIC_TOP_Lilly
             ca = new List<Chra>();
 
             // 캐릭 세팅            
-            ca.Add(new Chra("크라켄10", Att.dancer, Type.l, Buff.combo, 100, 16, 10));
-            ca.Add(new Chra("셜리10", Att.dancer, Type.t, Buff.combo, 100, 17, 10));
-            ca.Add(new Chra("호련10", Att.dancer, Type.s, Buff.combo, 100, 15, 15));
-            ca.Add(new Chra("벨10", Att.dancer, Type.s, Buff.combo, 100, 21, 10));
-            ca.Add(new Chra("라파엘10", Att.dancer, Type.n, Buff.combo, 100, 16, 18));
-            ca.Add(new Chra("볼프강10", Att.session, Type.n, Buff.combo, 100, 10, 9));
-            ca.Add(new Chra("재규어10", Att.session, Type.n, Buff.combo, 100, 15, 11));
-            ca.Add(new Chra("틴체르니10", Att.session, Type.n, Buff.combo, 100, 17, 10));
-            ca.Add(new Chra("루시퍼10", Att.session, Type.t, Buff.combo, 100, 15, 14));
-            ca.Add(new Chra("업튼10", Att.session, Type.s, Buff.combo, 100, 18, 14));
-            ca.Add(new Chra("트래셔10", Att.session, Type.n, Buff.combo, 100, 19, 15));
-            ca.Add(new Chra("걸윙10", Att.vocal, Type.n, Buff.combo, 100, 14, 10));
-            ca.Add(new Chra("제시10", Att.vocal, Type.t, Buff.combo, 100, 12, 13));
-            ca.Add(new Chra("아리아10", Att.vocal, Type.n, Buff.combo, 100, 16, 10));
-            ca.Add(new Chra("엘클리어10", Att.vocal, Type.n, Buff.combo, 100, 18, 10));
-            ca.Add(new Chra("니콜10", Att.vocal, Type.s, Buff.combo, 100, 15, 13));
             ca.Add(new Chra("엘리10", Att.vocal, Type.t, Buff.combo, 100, 18, 14));
-            ca.Add(new Chra("베아10", Att.vocal, Type.l, Buff.buff, 100, 11, 20));
-            ca.Add(new Chra("다이나10", Att.vocal, Type.l, Buff.etc, 100, 9, 1));
-            ca.Add(new Chra("장고10", Att.dancer, Type.l, Buff.buff, 40, 10, 20));
+            ca.Add(new Chra("제시10", Att.vocal, Type.t, Buff.combo, 100, 12, 13));
+            ca.Add(new Chra("케르밀라10", Att.vocal, Type.t, Buff.buff, 73, 11, 19));
+            ca.Add(new Chra("혁10", Att.vocal, Type.t, Buff.buff, 101, 15, 20));
+            ca.Add(new Chra("이브10", Att.vocal, Type.t, Buff.buff, 105, 10, 12));
+            ca.Add(new Chra("혀니10", Att.vocal, Type.t, Buff.buff, 85, 7, 6));
+            ca.Add(new Chra("지크10", Att.vocal, Type.t, Buff.etc, 9, 10, 25));
+            ca.Add(new Chra("엘 클리어10", Att.vocal, Type.t, Buff.combo, 100, 18, 10));
+            ca.Add(new Chra("베아트리스10", Att.vocal, Type.l, Buff.buff, 44, 11, 20));
+            ca.Add(new Chra("아리아10", Att.vocal, Type.l, Buff.combo, 100, 16, 10));
+            ca.Add(new Chra("다이나10", Att.vocal, Type.l, Buff.etc, 0, 9, 1));
+            ca.Add(new Chra("하이틴 유리10", Att.vocal, Type.l, Buff.buff, 100, 15, 14));
+            ca.Add(new Chra("미로10", Att.vocal, Type.l, Buff.buff, 90, 16, 11));
+            ca.Add(new Chra("니콜10", Att.vocal, Type.s, Buff.combo, 100, 15, 13));
+            ca.Add(new Chra("파르티나10", Att.vocal, Type.s, Buff.etc, 0, 0, 300));
+            ca.Add(new Chra("오키드10", Att.vocal, Type.s, Buff.buff, 83, 10, 20));
+            ca.Add(new Chra("스이10", Att.vocal, Type.s, Buff.buff, 97, 10, 12));
+            ca.Add(new Chra("슬래셔10", Att.vocal, Type.p, Buff.buff, 68, 13, 22));
+            ca.Add(new Chra("걸윙10", Att.vocal, Type.p, Buff.combo, 100, 14, 10));
             ca.Add(new Chra("캐롤10", Att.dancer, Type.t, Buff.buff, 72, 12, 20));
+            ca.Add(new Chra("셜리10", Att.dancer, Type.t, Buff.combo, 100, 17, 10));
+            ca.Add(new Chra("데몬10", Att.dancer, Type.t, Buff.buff, 94, 17, 15));
+            ca.Add(new Chra("로아10", Att.dancer, Type.t, Buff.buff, 94, 16, 16));
+            ca.Add(new Chra("시테10", Att.dancer, Type.t, Buff.etc, 0, 11, 1));
+            ca.Add(new Chra("하이틴 제이10", Att.dancer, Type.t, Buff.etc, 0, 14, 1));
+            ca.Add(new Chra("발렌타인10", Att.dancer, Type.l, Buff.buff, 99, 12, 20));
+            ca.Add(new Chra("장고10", Att.dancer, Type.l, Buff.buff, 40, 10, 20));
+            ca.Add(new Chra("라파엘10", Att.dancer, Type.l, Buff.combo, 100, 16, 18));
+            ca.Add(new Chra("도로시10", Att.dancer, Type.l, Buff.buff, 88, 12, 15));
+            ca.Add(new Chra("웨니10", Att.dancer, Type.l, Buff.buff, 80, 18, 17));
+            ca.Add(new Chra("크라켄10", Att.dancer, Type.l, Buff.combo, 100, 16, 10));
+            ca.Add(new Chra("스페이시10", Att.dancer, Type.l, Buff.etc, 0, 0, 300));
+            ca.Add(new Chra("아수라10", Att.dancer, Type.s, Buff.buff, 112, 12, 15));
+            ca.Add(new Chra("호련10", Att.dancer, Type.s, Buff.combo, 100, 15, 15));
+            ca.Add(new Chra("스테파니10", Att.dancer, Type.s, Buff.etc, 7, 10, 24));
+            ca.Add(new Chra("토미 슐츠10", Att.dancer, Type.s, Buff.buff, 89, 14, 14));
+            ca.Add(new Chra("엘 페일10", Att.dancer, Type.s, Buff.buff, 93, 14, 15));
+            ca.Add(new Chra("벨10", Att.dancer, Type.s, Buff.combo, 100, 21, 10));
+            ca.Add(new Chra("아폴로10", Att.dancer, Type.s, Buff.etc, 0, 0, 300));
+            ca.Add(new Chra("로제10", Att.dancer, Type.p, Buff.buff, 71, 13, 22));
+            ca.Add(new Chra("카론10", Att.dancer, Type.p, Buff.etc, 0, 0, 300));
+            ca.Add(new Chra("아레스무스10", Att.dancer, Type.p, Buff.buff, 68, 17, 24));
+            ca.Add(new Chra("하이틴 세나10", Att.dancer, Type.p, Buff.buff, 68, 15, 15));
+            ca.Add(new Chra("엔젤라10", Att.dancer, Type.p, Buff.etc, 0, 14, 1));
+            ca.Add(new Chra("메두사10", Att.session, Type.t, Buff.etc, 20, 10, 30));
+            ca.Add(new Chra("아르웬10", Att.session, Type.t, Buff.buff, 72, 12, 18));
+            ca.Add(new Chra("루시퍼10", Att.session, Type.t, Buff.combo, 100, 15, 14));
+            ca.Add(new Chra("조크 에리스갓10", Att.session, Type.t, Buff.buff, 90, 15, 17));
+            ca.Add(new Chra("조이10", Att.session, Type.t, Buff.buff, 35, 15, 15));
+            ca.Add(new Chra("베로니카10", Att.session, Type.t, Buff.buff, 99, 16, 16));
+            ca.Add(new Chra("촙스10", Att.session, Type.t, Buff.etc, 0, 9, 1));
+            ca.Add(new Chra("트래셔 박사10", Att.session, Type.l, Buff.combo, 100, 19, 15));
+            ca.Add(new Chra("프랑켄10", Att.session, Type.l, Buff.etc, 0, 14, 1));
+            ca.Add(new Chra("타냐10", Att.session, Type.l, Buff.buff, 89, 10, 18));
+            ca.Add(new Chra("액슬10", Att.session, Type.l, Buff.etc, 7, 15, 27));
+            ca.Add(new Chra("재규어10", Att.session, Type.l, Buff.combo, 100, 15, 11));
+            ca.Add(new Chra("포에트10", Att.session, Type.l, Buff.buff, 80, 15, 20));
+            ca.Add(new Chra("우리엘10", Att.session, Type.l, Buff.etc, 0, 0, 300));
+            ca.Add(new Chra("티타나10", Att.session, Type.s, Buff.buff, 108, 11, 14));
+            ca.Add(new Chra("패리스 업튼10", Att.session, Type.s, Buff.combo, 100, 18, 14));
+            ca.Add(new Chra("신시아10", Att.session, Type.s, Buff.buff, 79, 15, 20));
+            ca.Add(new Chra("오하나10", Att.session, Type.s, Buff.buff, 52, 10, 20));
+            ca.Add(new Chra("에이바10", Att.session, Type.s, Buff.buff, 97, 10, 12));
+            ca.Add(new Chra("하이틴 체르니10", Att.session, Type.s, Buff.combo, 100, 17, 10));
+            ca.Add(new Chra("볼프강10", Att.session, Type.p, Buff.combo, 100, 10, 9));
+            ca.Add(new Chra("루핑10", Att.session, Type.p, Buff.buff, 400, 4, 4));
+            ca.Add(new Chra("지니10", Att.session, Type.p, Buff.etc, 0, 12, 1));
+            ca.Add(new Chra("에이미10", Att.session, Type.p, Buff.etc, 0, 11, 1));
+            ca.Add(new Chra("탈리아10", Att.session, Type.p, Buff.etc, 0, 0, 300));
+
 
 
 
@@ -126,28 +175,9 @@ namespace TAPSONIC_TOP_Lilly
 
             trackBar1.Maximum = 180;
             trackBar1.Value = 120;
+            trackBar1.LargeChange = 1;
 
-            //pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.BackColor = Color.Black;
-
-            //pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
-
-
-            //pictureBox1.Size = new Size(210, 110);
-            //this.Controls.Add(pictureBox1);
-
-            //Bitmap flag = new Bitmap(200, 100);
-            //Graphics flagGraphics = Graphics.FromImage(flag);
-            //int red = 0;
-            //int white = 11;
-            //while (white <= 100)
-            //{
-            //    flagGraphics.FillRectangle(Brushes.Red, 0, red, 200, 10);
-            //    flagGraphics.FillRectangle(Brushes.White, 0, white, 200, 10);
-            //    red += 20;
-            //    white += 20;
-            //}
-            //pictureBox1.Image = flag;
 
             time_somgSet();
             print();            
@@ -188,10 +218,6 @@ namespace TAPSONIC_TOP_Lilly
 
         private static void charBuffCalcSub( Chra c)
         {
-           //System.Diagnostics.Debug.WriteLine(c.name);
-           //System.Diagnostics.Debug.WriteLine(c.off);
-           //System.Diagnostics.Debug.WriteLine(c.on);
-           //System.Diagnostics.Debug.WriteLine(c.buff_v);
             if (c.buff == Buff.buff)
             {
                 for (int i = 0; i < time_song; i++)
@@ -200,11 +226,6 @@ namespace TAPSONIC_TOP_Lilly
                     {
                         buff_v[i] += c.buff_v;
                     }
-                    // System.Diagnostics.Debug.Write(i );
-                    // System.Diagnostics.Debug.Write("\t");
-                    // System.Diagnostics.Debug.Write(i % (c.on + c.off));
-                    // System.Diagnostics.Debug.Write("\t");
-                    // System.Diagnostics.Debug.WriteLine(buff_v[i]);
                 }
             }
 
@@ -223,25 +244,16 @@ namespace TAPSONIC_TOP_Lilly
         void print()
         {
             graphics.Clear(BackColor);
+            for (int i = grp_h-99; i >=0 ; i-=100)
+            {
+                graphics.FillRectangle(Brushes.Black,0,i, time_song* time_px,1);
+            }
             for (int i = 0; i < time_song; i++)
             {
                 graphics.FillRectangle(Brushes.Green,i* time_px, grp_h-(buff_vall[i]/ grp_h_div),time_px, buff_vall[i] / grp_h_div);
             }
             pictureBox1.Image = bitmap;
         }
-
-        //private void pictureBox1_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
-        //{
-        //    // Create a local version of the graphics object for the PictureBox.
-        //    Graphics g = e.Graphics;
-        //
-        //    // Draw a string on the PictureBox.
-        //    g.DrawString("This is a diagonal line drawn on the control",
-        //        fnt, System.Drawing.Brushes.Blue, new Point(30, 30));
-        //    // Draw a line in the PictureBox.
-        //    g.DrawLine(System.Drawing.Pens.Red, pictureBox1.Left, pictureBox1.Top,
-        //        pictureBox1.Right, pictureBox1.Bottom);
-        //}
 
         private void label1_Click(object sender, EventArgs e)
         {
