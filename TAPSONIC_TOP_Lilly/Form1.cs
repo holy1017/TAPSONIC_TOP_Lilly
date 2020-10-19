@@ -15,8 +15,8 @@ namespace TAPSONIC_TOP_Lilly
         static int time_px = 5;// 초당 가로 픽셀
         static int time_song = 180;// 음악 최대 시간
         static int grp_w = time_song* time_px;// 그래픽 크기
-        static int grp_h_div = 1;//그래픽 배율 감소
-        static int grp_h = 600;// 그래픽 크기
+        static int grp_h_div = 2;//그래픽 배율 감소
+        static int grp_h = 300;// 그래픽 크기
         static int[] buff_vall = Enumerable.Repeat(100, time_song).ToArray();
         static int[] buff_v = Enumerable.Repeat(100, time_song).ToArray();
         static bool[] buff_c = Enumerable.Repeat(false, time_song).ToArray();
@@ -511,7 +511,7 @@ namespace TAPSONIC_TOP_Lilly
         void print()
         {
             graphics.Clear(BackColor);
-            for (int i = grp_h-99; i >=0 ; i-=100)
+            for (int i = grp_h-(99/ grp_h_div); i >=0 ; i-=(100/ grp_h_div))
             {
                 graphics.FillRectangle(Brushes.Black,0,i, time_song* time_px,1);
             }
