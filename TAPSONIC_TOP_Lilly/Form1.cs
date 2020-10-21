@@ -479,6 +479,9 @@ namespace TAPSONIC_TOP_Lilly
             print();            
         }
 
+        /// <summary>
+        /// 캐릭 및 곡을 종합해서 합산 계산
+        /// </summary>
         void charBuffCalc()
         {
             sum = 0;
@@ -515,6 +518,11 @@ namespace TAPSONIC_TOP_Lilly
             print();
         }
 
+        /// <summary>
+        /// 캐릭의 시간 단위마다 버프 값 배열 설정.
+        /// 만약 타입별 버프 필요하다면 여기서 수정 필요
+        /// </summary>
+        /// <param name="c"></param>
         private static void charBuffCalcSub( Chra c)
         {
             if (c.buff == Buff.buff)
@@ -540,6 +548,9 @@ namespace TAPSONIC_TOP_Lilly
             }
         }
 
+        /// <summary>
+        /// 그래프 표시
+        /// </summary>
         void print()
         {
             graphics.Clear(BackColor);
@@ -563,24 +574,31 @@ namespace TAPSONIC_TOP_Lilly
         {
             //Console.Write(comboBox1.SelectedIndex);
             //Console.WriteLine(comboBox1.Text);
-            chgChk(comboBox1,ct,label1);
+            chraSelectedIndexChanged(sender, ct,label1);
 
         }
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            chgChk(comboBox2,cl,label2);
+            chraSelectedIndexChanged(sender, cl,label2);
         }
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            chgChk(comboBox3,cs,label3);
+            chraSelectedIndexChanged(sender, cs,label3);
         }
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            chgChk(comboBox4,cp,label4);
+            chraSelectedIndexChanged(sender, cp,label4);
         }
 
-        private void chgChk(ComboBox comboBox, List<Chra> c, Label label)
+        /// <summary>
+        /// 캐릭목록 선택시 마다 반응
+        /// </summary>
+        /// <param name="comboBox"></param>
+        /// <param name="c"></param>
+        /// <param name="label"></param>
+        private void chraSelectedIndexChanged(object sender, List<Chra> c, Label label)
         {
+            ComboBox comboBox = (ComboBox)sender;
             if (comboBox.SelectedIndex == -1)
             {
                 label.Text = "";
@@ -632,6 +650,12 @@ namespace TAPSONIC_TOP_Lilly
             boxColor<Chra>(sender, e);
         }
 
+        /// <summary>
+        /// 콤보 리스트에서 속성에 따라 배경색 설정
+        /// </summary>
+        /// <typeparam name="T">Song,Chra인지 선택</typeparam>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void boxColor<T>(object sender, DrawItemEventArgs e)
         {
             //Console.WriteLine("comboBox1_DrawItem");
@@ -650,6 +674,11 @@ namespace TAPSONIC_TOP_Lilly
             e.Graphics.DrawString(((ComboBox)sender).Items[e.Index].ToString(), ((Control)sender).Font, Brushes.Black, e.Bounds.X, e.Bounds.Y);
         }
 
+        /// <summary>
+        /// 속성별 색 얻기
+        /// </summary>
+        /// <param name="att"></param>
+        /// <returns></returns>
         private static Brush getBrushAtt(Att att)
         {
             switch (att)
@@ -671,6 +700,11 @@ namespace TAPSONIC_TOP_Lilly
 
             }
         }
+        /// <summary>
+        /// 속성별 색 얻기
+        /// </summary>
+        /// <param name="att"></param>
+        /// <returns></returns>
         private static Color getColorAtt(Att att)
         {
             switch (att)
