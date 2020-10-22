@@ -28,7 +28,13 @@ namespace TAPSONIC_TOP_Lilly
         static int[] buff_sa = Enumerable.Repeat(0, time_song).ToArray();//버프값 슬라. 만약 타입별로 한다면 이걸 분할해야함.
         static int[] buff_fa = Enumerable.Repeat(0, time_song).ToArray();//버프값 플릭. 만약 타입별로 한다면 이걸 분할해야함.
         static bool[] buff_c = Enumerable.Repeat(false, time_song).ToArray();//콤보 유무
+
         static int sum = 0;// 
+        static int sum_t = 0;// 
+        static int sum_l = 0;// 
+        static int sum_s = 0;// 
+        static int sum_f = 0;// 
+        static int cnt = 0;// 
 
         static List<Chra> ca;//모든캐릭
         static List<Chra> ct;//탭캐릭. 분류 코드로 자동 처리
@@ -600,6 +606,11 @@ namespace TAPSONIC_TOP_Lilly
         {
             // 값 초기화
             sum = 0;
+            sum_t = 0;
+            sum_l = 0;
+            sum_s = 0;
+            sum_f = 0;
+            cnt = 0;
             buff_va = Enumerable.Repeat(0, time_song).ToArray();
             buff_ta = Enumerable.Repeat(0, time_song).ToArray();
             buff_la = Enumerable.Repeat(0, time_song).ToArray();
@@ -632,15 +643,22 @@ namespace TAPSONIC_TOP_Lilly
                     buff_la[i] *= 2;
                     buff_sa[i] *= 2;
                     buff_fa[i] *= 2;
+                    cnt++;
                 }
-                //buff_va[i] += buff_ta[i];
-                //buff_va[i] += buff_la[i];
-                //buff_va[i] += buff_sa[i];
-                //buff_va[i] += buff_fa[i];
+                sum_t += buff_ta[i];
+                sum_l += buff_la[i];
+                sum_s += buff_sa[i];
+                sum_f += buff_fa[i];
                 sum += buff_va[i];
 
             }
             label5.Text = string.Format("{0}", sum);
+            label6.Text = string.Format("{0:N2}", (double)sum_t / (double)time_song);
+            label7.Text = string.Format("{0:N2}", (double)sum_l / (double)time_song);
+            label8.Text = string.Format("{0:N2}", (double)sum_s / (double)time_song);
+            label9.Text = string.Format("{0:N2}", (double)sum_f / (double)time_song);
+            label10.Text = string.Format("{0:N2}", (double)cnt / (double)time_song);
+
             print();
             print2();
         }
@@ -741,10 +759,10 @@ namespace TAPSONIC_TOP_Lilly
             {
                 //Console.WriteLine("{0}\t{1}\t{2}\t{3}\t", buff_ta[i], buff_la[i],  buff_sa[i], buff_fa[i]);
                 //Debug.WriteLine("{0}\t{1}\t{2}\t{3}\t", buff_ta[i], buff_la[i],  buff_sa[i], buff_fa[i]);
-                graphics2.FillRectangle(getChraBursh(buff_c[i] ? 255 : 0, buff_t[i] > 0 ? 255 : 0, 0), i * (time_px), 0, time_px - 1, 19);
-                graphics2.FillRectangle(getChraBursh(buff_c[i] ? 255 : 0,buff_l[i] > 0 ? 255 :  0, 0), i * (time_px), 20, time_px - 1, 19);
-                graphics2.FillRectangle(getChraBursh(buff_c[i] ? 255 : 0,buff_s[i] > 0 ? 255 :  0, 0), i * (time_px), 40, time_px - 1, 19);
-                graphics2.FillRectangle(getChraBursh(buff_c[i] ? 255 : 0,buff_f[i] > 0 ? 255 :  0, 0), i * (time_px), 60, time_px - 1, 19);
+                graphics2.FillRectangle(getChraBursh(buff_c[i] , buff_t[i] > 0 ), i * (time_px), 0, time_px - 1, 19);
+                graphics2.FillRectangle(getChraBursh(buff_c[i] , buff_l[i] > 0 ), i * (time_px), 20, time_px - 1, 19);
+                graphics2.FillRectangle(getChraBursh(buff_c[i] , buff_s[i] > 0 ), i * (time_px), 40, time_px - 1, 19);
+                graphics2.FillRectangle(getChraBursh(buff_c[i] , buff_f[i] > 0 ), i * (time_px), 60, time_px - 1, 19);
                 if (buff_c[i])
                 {
                     graphics2.FillRectangle(Brushes.Yellow, i * (time_px), 80, time_px - 1, 19);
@@ -754,10 +772,13 @@ namespace TAPSONIC_TOP_Lilly
             pictureBox2.Image = bitmap2;
         }
 
-        private Brush getChraBursh(int r, int g, int b)
+        private Brush getChraBursh(bool c, bool b)
         {
-            solidBrush.Color = Color.FromArgb(r, g, b);
-            return solidBrush;
+            //solidBrush.Color = Color.FromArgb(r, g, b);
+            if (c && b) return Brushes.LightBlue;
+            if (c && !b) return Brushes.Yellow;
+            if (!c && b) return Brushes.GreenYellow;
+            return Brushes.Black ;
         }
 
         /// <summary>
