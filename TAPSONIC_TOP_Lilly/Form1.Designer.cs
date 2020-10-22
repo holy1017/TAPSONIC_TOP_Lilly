@@ -72,7 +72,7 @@
             this.comboBox2.Location = new System.Drawing.Point(98, 37);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(490, 24);
-            this.comboBox2.TabIndex = 0;
+            this.comboBox2.TabIndex = 1;
             this.comboBox2.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.comboBox2_DrawItem);
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
@@ -83,7 +83,7 @@
             this.comboBox3.Location = new System.Drawing.Point(98, 66);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(490, 24);
-            this.comboBox3.TabIndex = 0;
+            this.comboBox3.TabIndex = 2;
             this.comboBox3.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.comboBox3_DrawItem);
             this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
@@ -94,7 +94,7 @@
             this.comboBox4.Location = new System.Drawing.Point(98, 95);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(490, 24);
-            this.comboBox4.TabIndex = 0;
+            this.comboBox4.TabIndex = 3;
             this.comboBox4.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.comboBox4_DrawItem);
             this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox4_SelectedIndexChanged);
             // 
@@ -139,7 +139,7 @@
             this.trackBar1.Location = new System.Drawing.Point(98, 154);
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(900, 45);
-            this.trackBar1.TabIndex = 2;
+            this.trackBar1.TabIndex = 5;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // label0
@@ -176,7 +176,7 @@
             this.comboBox5.Location = new System.Drawing.Point(98, 124);
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(490, 24);
-            this.comboBox5.TabIndex = 0;
+            this.comboBox5.TabIndex = 4;
             this.comboBox5.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.comboBox5_DrawItem);
             this.comboBox5.SelectedIndexChanged += new System.EventHandler(this.comboBox5_SelectedIndexChanged);
             // 
