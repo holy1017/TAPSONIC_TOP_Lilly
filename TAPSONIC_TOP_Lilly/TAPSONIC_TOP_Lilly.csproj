@@ -7,20 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="Chra\chra.csv">
+    <None Update="CSV\chra.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="SongNote\Bad Elixir.csv">
+    <None Update="CSV\Note\Bad Elixir.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Song\song.csv">
+    <None Update="CSV\song.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Chra\" />
-    <Folder Include="Song\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -153,7 +153,7 @@ namespace TAPSONIC_TOP_Lilly
 
         void readSongCsv()
         {
-            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo("SongNote");
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(@"CSV\Note");
             foreach (System.IO.FileInfo File in di.GetFiles())
             {
                 if (File.Extension.ToLower().CompareTo(".csv") == 0)
@@ -167,7 +167,7 @@ namespace TAPSONIC_TOP_Lilly
         List<Note> readNoteCsv(string s)
         {
             List<Note> lnt = new List<Note>();
-            using (StreamReader sr = new StreamReader(@"SongNote\" + s))
+            using (StreamReader sr = new StreamReader(@"CSV\Note\" + s))
             {
                 while (!sr.EndOfStream)
                 {
@@ -233,7 +233,7 @@ namespace TAPSONIC_TOP_Lilly
 
         private static void setChra()
         {           
-            using (StreamReader sr = new StreamReader(@"chra\chra.csv", euckr))//EUC-KR
+            using (StreamReader sr = new StreamReader(@"CSV\chra.csv", euckr))//EUC-KR
             {
                 while (!sr.EndOfStream)
                 {
