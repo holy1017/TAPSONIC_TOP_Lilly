@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace TAPSONIC_TOP_Lilly
 {
     public partial class Form1 : Form
     {
+        static Encoding euckr = Encoding.GetEncoding(51949);
+
         static int time_px = 5;// 초당 가로 픽셀
         static int time_song = 180;// 음악 최대 시간
 
@@ -36,13 +39,14 @@ namespace TAPSONIC_TOP_Lilly
         static int sum_f = 0;// 
         static int cnt = 0;// 
 
-        static List<Chra> ca;//모든캐릭
+        static List<Chra> ca = new List<Chra>();//모든캐릭
         static List<Chra> ct;//탭캐릭. 분류 코드로 자동 처리
         static List<Chra> cl;//탭캐릭. 분류 코드로 자동 처리
         static List<Chra> cs;//탭캐릭. 분류 코드로 자동 처리
         static List<Chra> cp;//탭캐릭. 분류 코드로 자동 처리
 
         static List<Song> so;//음악 목록
+        Dictionary<string, List<Note>> openWith = new Dictionary<string, List<Note>>();
 
         static Font fnt = new Font("맑은 고딕", 16);
         //var fontf = new Font("맑은 고딕", 16, FontStyle.Regular, GraphicsUnit.Pixel);
@@ -139,10 +143,56 @@ namespace TAPSONIC_TOP_Lilly
         }
 
 
+        struct Note
+        {
+            int time;
+            Type type;
+            int length;
+            int cnt;
+        }
+
+        void readSongCsv()
+        {
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo("SongNote");
+            foreach (System.IO.FileInfo File in di.GetFiles())
+            {
+                if (File.Extension.ToLower().CompareTo(".csv") == 0)
+                {
+                    Debug.WriteLine("D:{0}\t{1}", File.Name, File.FullName);
+                    readNoteCsv(File.Name);
+                }
+            }
+        }
+
+        List<Note> readNoteCsv(string s)
+        {
+            List<Note> lnt = new List<Note>();
+            using (StreamReader sr = new StreamReader(@"SongNote\" + s))
+            {
+                while (!sr.EndOfStream)
+                {
+                    string[] temp = sr.ReadLine().Split('\t');        // Split() 메서드를 이용하여 ',' 구분하여 잘라냄
+                    //주석 회피
+                    if (temp[0].Substring(0, 1).Equals("#"))
+                    {
+                        continue;
+                    }
+                    //string s = sr.ReadLine();
+                    //Console.WriteLine("C:{0}\t{1}\t{2}\t{3}", temp[0], temp[1], temp[2], temp[3]);
+                    Debug.WriteLine("D:{0}\t{1}\t{2}\t{3}", temp[0], temp[1], temp[2], temp[3]);
+                }
+            }
+            return lnt;
+        }
 
         public Form1()
         {
             InitializeComponent();
+
+            //PM> Install-Package System.Text.Encoding.CodePages -Version 4.7.1
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);// 망할 닷넷 같으니
+
+            readSongCsv();
 
             setChra();
             setSong();
@@ -182,90 +232,132 @@ namespace TAPSONIC_TOP_Lilly
         }
 
         private static void setChra()
-        {
-            ca = new List<Chra>();
+        {           
+            using (StreamReader sr = new StreamReader(@"chra\chra.csv", euckr))//EUC-KR
+            {
+                while (!sr.EndOfStream)
+                {
+                    try
+                    {
+                        string[] s = sr.ReadLine().Split(',');        // Split() 메서드를 이용하여 ',' 구분하여 잘라냄
 
-            // 캐릭 세팅            
-            ca.Add(new Chra(" ", Att.none, Type.none, Buff.etc, 100, 10, 10));
-            ca.Add(new Chra(" ", Att.none, Type.tap, Buff.etc, 100, 10, 10));
-            ca.Add(new Chra(" ", Att.none, Type.@long, Buff.etc, 100, 10, 10));
-            ca.Add(new Chra(" ", Att.none, Type.slide, Buff.etc, 100, 10, 10));
-            ca.Add(new Chra(" ", Att.none, Type.Flick, Buff.etc, 100, 10, 10));
-            ca.Add(new Chra("엘리10", Att.vocal, Type.tap, Buff.combo, 100, 18, 14));
-            ca.Add(new Chra("제시10", Att.vocal, Type.tap, Buff.combo, 100, 12, 13));
-            ca.Add(new Chra("케르밀라10", Att.vocal, Type.tap, Buff.buff_t, 73, 11, 19));
-            ca.Add(new Chra("혁10", Att.vocal, Type.tap, Buff.buff_t, 101, 15, 20));
-            ca.Add(new Chra("이브10", Att.vocal, Type.tap, Buff.buff_t, 105, 10, 12));
-            ca.Add(new Chra("혀니10", Att.vocal, Type.tap, Buff.buff_t, 85, 7, 6));
-            ca.Add(new Chra("지크10", Att.vocal, Type.tap, Buff.etc, 9, 10, 25));
-            ca.Add(new Chra("엘 클리어10", Att.vocal, Type.tap, Buff.combo, 100, 18, 10));
-            ca.Add(new Chra("베아트리스10", Att.vocal, Type.@long, Buff.buff_a, 44, 11, 20));
-            ca.Add(new Chra("아리아10", Att.vocal, Type.@long, Buff.combo, 100, 16, 10));
-            ca.Add(new Chra("다이나10", Att.vocal, Type.@long, Buff.etc, 0, 9, 1));
-            ca.Add(new Chra("하이틴 유리10", Att.vocal, Type.@long, Buff.buff_l, 100, 15, 14));
-            ca.Add(new Chra("미로10", Att.vocal, Type.@long, Buff.buff_l, 90, 16, 11));
-            ca.Add(new Chra("니콜10", Att.vocal, Type.slide, Buff.combo, 100, 15, 13));
-            ca.Add(new Chra("파르티나10", Att.vocal, Type.slide, Buff.etc, 0, 0, 300));
-            ca.Add(new Chra("오키드10", Att.vocal, Type.slide, Buff.buff_s, 83, 10, 20));
-            ca.Add(new Chra("스이10", Att.vocal, Type.slide, Buff.buff_s, 97, 10, 12));
-            ca.Add(new Chra("슬래셔10", Att.vocal, Type.Flick, Buff.buff_a, 68, 13, 22));
-            ca.Add(new Chra("걸윙10", Att.vocal, Type.Flick, Buff.combo, 100, 14, 10));
-            ca.Add(new Chra("보니10", Att.vocal, Type.slide, Buff.combo, 100, 15, 8));
-            ca.Add(new Chra("캐롤10", Att.dancer, Type.tap, Buff.buff_t, 72, 12, 20));
-            ca.Add(new Chra("파트라10", Att.dancer, Type.tap, Buff.combo, 100, 15, 13));
-            ca.Add(new Chra("셜리10", Att.dancer, Type.tap, Buff.combo, 100, 17, 10));
-            ca.Add(new Chra("데몬10", Att.dancer, Type.tap, Buff.buff_t, 94, 17, 15));
-            ca.Add(new Chra("로아10", Att.dancer, Type.tap, Buff.buff_t, 94, 16, 16));
-            ca.Add(new Chra("시테10", Att.dancer, Type.tap, Buff.etc, 0, 11, 1));
-            ca.Add(new Chra("하이틴 제이10", Att.dancer, Type.tap, Buff.etc, 0, 14, 1));
-            ca.Add(new Chra("발렌타인10", Att.dancer, Type.@long, Buff.buff_l, 99, 12, 20));
-            ca.Add(new Chra("장고10", Att.dancer, Type.@long, Buff.buff_a, 40, 10, 20));
-            ca.Add(new Chra("라파엘10", Att.dancer, Type.@long, Buff.combo, 100, 16, 18));
-            ca.Add(new Chra("도로시10", Att.dancer, Type.@long, Buff.buff_l, 88, 12, 15));
-            ca.Add(new Chra("웨니10", Att.dancer, Type.@long, Buff.buff_l, 80, 18, 17));
-            ca.Add(new Chra("크라켄10", Att.dancer, Type.@long, Buff.combo, 100, 16, 10));
-            ca.Add(new Chra("스페이시10", Att.dancer, Type.@long, Buff.etc, 0, 0, 300));
-            ca.Add(new Chra("아수라10", Att.dancer, Type.slide, Buff.buff_s, 112, 12, 15));
-            ca.Add(new Chra("호련(교)10", Att.dancer, Type.slide, Buff.combo, 100, 15, 15));
-            ca.Add(new Chra("호련(교)9", Att.dancer, Type.slide, Buff.combo, 100, 15, 13));
-            ca.Add(new Chra("호련10", Att.dancer, Type.slide, Buff.combo, 100, 15, 12));
-            ca.Add(new Chra("호련9", Att.dancer, Type.slide, Buff.combo, 100, 15, 10));
-            ca.Add(new Chra("스테파니10", Att.dancer, Type.slide, Buff.etc, 7, 10, 24));
-            ca.Add(new Chra("토미 슐츠10", Att.dancer, Type.slide, Buff.buff_s, 89, 14, 14));
-            ca.Add(new Chra("엘 페일10", Att.dancer, Type.slide, Buff.buff_s, 93, 14, 15));
-            ca.Add(new Chra("벨10", Att.dancer, Type.slide, Buff.combo, 100, 21, 10));
-            ca.Add(new Chra("아폴로10", Att.dancer, Type.slide, Buff.etc, 0, 0, 300));
-            ca.Add(new Chra("로제10", Att.dancer, Type.Flick, Buff.buff_a, 71, 13, 22));
-            ca.Add(new Chra("카론10", Att.dancer, Type.Flick, Buff.etc, 0, 0, 300));
-            ca.Add(new Chra("아레스무스10", Att.dancer, Type.Flick, Buff.buff_a, 68, 17, 24));
-            ca.Add(new Chra("하이틴 세나10", Att.dancer, Type.Flick, Buff.buff_a, 68, 15, 15));
-            ca.Add(new Chra("엔젤라10", Att.dancer, Type.Flick, Buff.etc, 0, 14, 1));
-            ca.Add(new Chra("메두사10", Att.session, Type.tap, Buff.etc, 20, 10, 30));
-            ca.Add(new Chra("아르웬10", Att.session, Type.tap, Buff.buff_t, 72, 12, 18));
-            ca.Add(new Chra("루시퍼10", Att.session, Type.tap, Buff.combo, 100, 15, 14));
-            ca.Add(new Chra("조크 에리스갓10", Att.session, Type.tap, Buff.buff_t, 90, 15, 17));
-            ca.Add(new Chra("조이10", Att.session, Type.tap, Buff.buff_a, 35, 15, 15));
-            ca.Add(new Chra("베로니카10", Att.session, Type.tap, Buff.buff_t, 99, 16, 16));
-            ca.Add(new Chra("촙스10", Att.session, Type.tap, Buff.etc, 0, 9, 1));
-            ca.Add(new Chra("트래셔 박사10", Att.session, Type.@long, Buff.combo, 100, 19, 15));
-            ca.Add(new Chra("프랑켄10", Att.session, Type.@long, Buff.etc, 0, 14, 1));
-            ca.Add(new Chra("타냐10", Att.session, Type.@long, Buff.buff_l, 89, 10, 18));
-            ca.Add(new Chra("액슬10", Att.session, Type.@long, Buff.etc, 7, 15, 27));
-            ca.Add(new Chra("재규어10", Att.session, Type.@long, Buff.combo, 100, 15, 11));
-            ca.Add(new Chra("포에트10", Att.session, Type.@long, Buff.buff_l, 80, 15, 20));
-            ca.Add(new Chra("우리엘10", Att.session, Type.@long, Buff.etc, 0, 0, 300));
-            ca.Add(new Chra("티타나10", Att.session, Type.slide, Buff.buff_s, 108, 11, 14));
-            ca.Add(new Chra("패리스 업튼10", Att.session, Type.slide, Buff.combo, 100, 18, 14));
-            ca.Add(new Chra("신시아10", Att.session, Type.slide, Buff.buff_s, 79, 15, 20));
-            ca.Add(new Chra("오하나10", Att.session, Type.slide, Buff.buff_s, 52, 10, 20));
-            ca.Add(new Chra("에이바10", Att.session, Type.slide, Buff.buff_s, 97, 10, 12));
-            ca.Add(new Chra("하이틴 체르니10", Att.session, Type.slide, Buff.combo, 100, 17, 10));
-            ca.Add(new Chra("볼프강10", Att.session, Type.Flick, Buff.combo, 100, 10, 9));
-            ca.Add(new Chra("루핑10", Att.session, Type.Flick, Buff.buff_f, 400, 4, 4));
-            ca.Add(new Chra("지니10", Att.session, Type.Flick, Buff.etc, 0, 12, 1));
-            ca.Add(new Chra("에이미10", Att.session, Type.Flick, Buff.etc, 0, 11, 1));
-            ca.Add(new Chra("탈리아10", Att.session, Type.Flick, Buff.etc, 0, 0, 300));
+                        Debug.Write( s.Length, ";\t");
+                        for (int i = 0; i < s.Length; i++)
+                        {
+                            Debug.Write( s[i], "\t");
+                        }
+                        Debug.WriteLine(";\t");
 
+                        int cl = 0;
+
+                        //주석 회피. 이름
+                        if (s[cl].Length != 0 && s[cl].Substring(0, 1).Equals("#"))
+                        {
+                            continue;
+                        }
+
+                        cl++;
+
+                        // 속성
+                        if (s[cl].Length == 0) continue;
+
+                        Att att = Att.none;
+                        switch (s[cl].Substring(0, 1))
+                        {
+                            case "v":
+                            case "V":
+                                att = Att.vocal;
+                                break;
+                            case "d":
+                            case "D":
+                                att = Att.dancer;
+                                break;
+                            case "s":
+                            case "S":
+                                att = Att.session;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        cl++;
+
+                        // 타입
+                        if (s[cl].Length == 0) continue;                        
+
+                        Type type = Type.none;
+                        switch (s[cl].Substring(0, 1))
+                        {
+                            case "t":
+                            case "T":
+                                type = Type.tap;
+                                break;
+                            case "l":
+                            case "L":
+                                type = Type.@long;
+                                break;
+                            case "s":
+                            case "S":
+                                type = Type.slide;
+                                break;
+                            case "f":
+                            case "F":
+                                type = Type.Flick;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        cl++;
+
+                        // 버프
+                        if (s[cl].Length == 0) continue;                        
+
+                        Buff buff = Buff.etc;
+                        switch (s[cl].Substring(0, 1))
+                        {
+                            case "c":
+                            case "C":
+                                buff = Buff.combo;
+                                break;
+                            case "a":
+                            case "A":
+                                buff = Buff.buff_a;
+                                break;
+                            case "t":
+                            case "T":
+                                buff = Buff.buff_t;
+                                break;
+                            case "l":
+                            case "L":
+                                buff = Buff.buff_l;
+                                break;
+                            case "s":
+                            case "S":
+                                buff = Buff.buff_s;
+                                break;
+                            case "f":
+                            case "F":
+                                buff = Buff.buff_f;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        cl++;
+
+                        ca.Add(new Chra(s[0], att, type, buff, int.Parse(s[4]), int.Parse(s[5]), int.Parse(s[6])));
+
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e);
+                    }
+                    Debug.WriteLine("ca.Last:{0}", ca.Last());
+                    Debug.WriteLine("ca.Count:{0}", ca.Count);
+                }
+
+            }
 
             // 정렬
             ca.Sort(delegate (Chra x, Chra y)
@@ -759,10 +851,10 @@ namespace TAPSONIC_TOP_Lilly
             {
                 //Console.WriteLine("{0}\t{1}\t{2}\t{3}\t", buff_ta[i], buff_la[i],  buff_sa[i], buff_fa[i]);
                 //Debug.WriteLine("{0}\t{1}\t{2}\t{3}\t", buff_ta[i], buff_la[i],  buff_sa[i], buff_fa[i]);
-                graphics2.FillRectangle(getChraBursh(buff_c[i] , buff_t[i] > 0 ), i * (time_px), 0, time_px - 1, 19);
-                graphics2.FillRectangle(getChraBursh(buff_c[i] , buff_l[i] > 0 ), i * (time_px), 20, time_px - 1, 19);
-                graphics2.FillRectangle(getChraBursh(buff_c[i] , buff_s[i] > 0 ), i * (time_px), 40, time_px - 1, 19);
-                graphics2.FillRectangle(getChraBursh(buff_c[i] , buff_f[i] > 0 ), i * (time_px), 60, time_px - 1, 19);
+                graphics2.FillRectangle(getChraBursh(buff_c[i], buff_t[i] > 0), i * (time_px), 0, time_px - 1, 19);
+                graphics2.FillRectangle(getChraBursh(buff_c[i], buff_l[i] > 0), i * (time_px), 20, time_px - 1, 19);
+                graphics2.FillRectangle(getChraBursh(buff_c[i], buff_s[i] > 0), i * (time_px), 40, time_px - 1, 19);
+                graphics2.FillRectangle(getChraBursh(buff_c[i], buff_f[i] > 0), i * (time_px), 60, time_px - 1, 19);
                 if (buff_c[i])
                 {
                     graphics2.FillRectangle(Brushes.Yellow, i * (time_px), 80, time_px - 1, 19);
@@ -778,7 +870,7 @@ namespace TAPSONIC_TOP_Lilly
             if (c && b) return Brushes.LightBlue;
             if (c && !b) return Brushes.Yellow;
             if (!c && b) return Brushes.GreenYellow;
-            return Brushes.Black ;
+            return Brushes.Black;
         }
 
         /// <summary>
@@ -787,10 +879,23 @@ namespace TAPSONIC_TOP_Lilly
         void print()
         {
             graphics.Clear(BackColor);
+            // 100% 마다 가로줄
             for (int i = grp_h - (99 / grp_h_div); i >= 0; i -= (100 / grp_h_div))
             {
                 graphics.FillRectangle(Brushes.Black, 0, i, time_song * time_px, 1);
             }
+
+            // 초라인 표시
+            for (int i = 4; i < time_song; i += 5)
+            {
+                graphics.FillRectangle(Brushes.White, i * time_px, 0, time_px, grp_h);
+            }
+            for (int i = 29; i < time_song; i += 30)
+            {
+                graphics.FillRectangle(Brushes.Black, i * time_px, 0, time_px, grp_h);
+            }
+
+            // 버프값에 따른 그래프
             for (int i = 0; i < time_song; i++)
             {
                 graphics.FillRectangle(Brushes.Green, i * time_px, grp_h - (buff_va[i] / grp_h_div), time_px, buff_va[i] / grp_h_div);

@@ -1,0 +1,80 @@
+#이름,속성,타입,버프,버프값,쿨타임,발동
+,vocal,tap,etc,0,10,10
+,dancer,long,etc,0,10,10
+,session,slide,etc,0,10,10
+,none,Flick,etc,0,10,10
+엘리10,vocal,tap,combo,100 ,18 ,14 
+제시10,vocal,tap,combo,100 ,12 ,13 
+케르밀라10,vocal,tap,tap,73 ,11 ,19 
+혁10,vocal,tap,tap,101 ,15 ,20 
+이브10,vocal,tap,tap,105 ,10 ,12 
+혀니10,vocal,tap,tap,85 ,7 ,6 
+지크10,vocal,tap,etc,9 ,10 ,25 
+엘 클리어10,vocal,tap,combo,100 ,18 ,10 
+베아트리스10,vocal,long,all,44 ,11 ,20 
+아리아10,vocal,long,combo,100 ,16 ,10 
+다이나10,vocal,long,etc,0 ,9 ,1 
+하이틴 유리10,vocal,long,long,100 ,15 ,14 
+미로10,vocal,long,long,90 ,16 ,11 
+니콜10,vocal,slide,combo,100 ,15 ,13 
+파르티나10,vocal,slide,etc,0 ,0 ,300 
+오키드10,vocal,slide,slide,83 ,10 ,20 
+스이10,vocal,slide,slide,97 ,10 ,12 
+슬래셔10,vocal,Flick,all,68 ,13 ,22 
+걸윙10,vocal,Flick,combo,100 ,14 ,10 
+보니10,vocal,slide,combo,100 ,15 ,8 
+캐롤10,dancer,tap,tap,72 ,12 ,20 
+파트라10,dancer,tap,combo,100 ,15 ,13 
+셜리10,dancer,tap,combo,100 ,17 ,10 
+데몬10,dancer,tap,tap,94 ,17 ,15 
+로아10,dancer,tap,tap,94 ,16 ,16 
+시테10,dancer,tap,etc,0 ,11 ,1 
+하이틴 제이10,dancer,tap,etc,0 ,14 ,1 
+발렌타인10,dancer,long,long,99 ,12 ,20 
+장고10,dancer,long,all,40 ,10 ,20 
+라파엘10,dancer,long,combo,100 ,16 ,18 
+도로시10,dancer,long,long,88 ,12 ,15 
+웨니10,dancer,long,long,80 ,18 ,17 
+크라켄10,dancer,long,combo,100 ,16 ,10 
+스페이시10,dancer,long,etc,0 ,0 ,300 
+아수라10,dancer,slide,slide,112 ,12 ,15 
+호련(교)10,dancer,slide,combo,100 ,15 ,15 
+호련(교)9,dancer,slide,combo,100 ,15 ,13 
+호련10,dancer,slide,combo,100 ,15 ,12 
+호련9,dancer,slide,combo,100 ,15 ,10 
+스테파니10,dancer,slide,etc,7 ,10 ,24 
+토미 슐츠10,dancer,slide,slide,89 ,14 ,14 
+엘 페일10,dancer,slide,slide,93 ,14 ,15 
+벨10,dancer,slide,combo,100 ,21 ,10 
+아폴로10,dancer,slide,etc,0 ,0 ,300 
+로제10,dancer,Flick,all,71 ,13 ,22 
+카론10,dancer,Flick,etc,0 ,0 ,300 
+아레스무스10,dancer,Flick,all,68 ,17 ,24 
+하이틴 세나10,dancer,Flick,all,68 ,15 ,15 
+엔젤라10,dancer,Flick,etc,0 ,14 ,1 
+틴세나10,dancer,Flick,all,68 ,15 ,15 
+메두사10,session,tap,etc,20 ,10 ,30 
+아르웬10,session,tap,tap,72 ,12 ,18 
+루시퍼10,session,tap,combo,100 ,15 ,14 
+조크 에리스갓10,session,tap,tap,90 ,15 ,17 
+조이10,session,tap,all,35 ,15 ,15 
+베로니카10,session,tap,tap,99 ,16 ,16 
+촙스10,session,tap,etc,0 ,9 ,1 
+트래셔 박사10,session,long,combo,100 ,19 ,15 
+프랑켄10,session,long,etc,0 ,14 ,1 
+타냐10,session,long,long,89 ,10 ,18 
+액슬10,session,long,etc,7 ,15 ,27 
+재규어10,session,long,combo,100 ,15 ,11 
+포에트10,session,long,long,80 ,15 ,20 
+우리엘10,session,long,etc,0 ,0 ,300 
+티타나10,session,slide,slide,108 ,11 ,14 
+패리스 업튼10,session,slide,combo,100 ,18 ,14 
+신시아10,session,slide,slide,79 ,15 ,20 
+오하나10,session,slide,slide,52 ,10 ,20 
+에이바10,session,slide,slide,97 ,10 ,12 
+하이틴 체르니10,session,slide,combo,100 ,17 ,10 
+볼프강10,session,Flick,combo,100 ,10 ,9 
+루핑10,session,Flick,Flick,400 ,4 ,4 
+지니10,session,Flick,etc,0 ,12 ,1 
+에이미10,session,Flick,etc,0 ,11 ,1 
+탈리아10,session,Flick,etc,0 ,0 ,300 
