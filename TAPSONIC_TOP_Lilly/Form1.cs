@@ -895,6 +895,7 @@ namespace TAPSONIC_TOP_Lilly
 
             bool[] b1;// = Enumerable.Repeat(false, time_song).ToArray();//콤보 유무
 
+            // 콤보 효율 계산
             foreach (var c1 in chra_c_t)
             {
                 b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
@@ -920,25 +921,29 @@ namespace TAPSONIC_TOP_Lilly
                 SetComboArrToDic(c1, chra_c_f, b1, dchra);
             }
 
+            // 테이블 처리
             DataTable dt = new DataTable("Table1");//DataTable 정의
 
             // 칼럼 정의
-            DataColumn col = new DataColumn("곡이름", typeof(string));
-            dt.Columns.Add(col);
+            dt.Columns.Add(new DataColumn("곡이름", typeof(string)));
+            dt.Columns.Add(new DataColumn("속성", typeof(string)));
+            dt.Columns.Add(new DataColumn("시간", typeof(int)));
             foreach (var c in dchra)
             {
                 //col = new DataColumn(c.Key, typeof(string));
-                col = new DataColumn(c.Key, typeof(double));                
-                dt.Columns.Add(col);
+                dt.Columns.Add(new DataColumn(c.Key, typeof(double)));
             }
 
             int cnt;
+            DataRow row;
 
             // 곡별로 캐릭 효율
             foreach (var s in song)
             {
-                DataRow row = dt.NewRow();
+                row = dt.NewRow();
                 row["곡이름"] = s.name;
+                row["속성"] = s.att;
+                row["시간"] = s.time;
 
                 foreach (var c in dchra)
                 {
@@ -962,23 +967,33 @@ namespace TAPSONIC_TOP_Lilly
             //excelSheet = (Microsoft.Office.Interop.Excel.Worksheet)excelworkBook.ActiveSheet;
 
             XLWorkbook wb = new XLWorkbook();
-            IXLWorksheet ws= wb.Worksheets.Add(dt, "WorksheetName");
-            ws.Range(ws.Cell(2, 2), ws.Cell(song.Count+1, dchra.Count+1)).Style.NumberFormat.Format = "0.0%";
-
-            
+            IXLWorksheet ws= wb.Worksheets.Add(dt, "ByLilly");
+            ws.Range(ws.Cell(2, 4), ws.Cell(song.Count+1, dchra.Count+3)).Style.NumberFormat.Format = "0.0%";//퍼센트로 서식 지정
+            ws.Row(1).Style.Alignment.WrapText = true;
+            ws.Row(1).AdjustToContents();
+            ws.Row(1).Height = 90;
+                        
+            string fs= "곡별콤보캐릭조합" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
             try
             {
-                wb.SaveAs("곡별콤보캐릭조합.xlsx");
-                MessageBox.Show("곡별콤보캐릭조합.xlsx 파일 출력 완료");
+                wb.SaveAs(fs);
+                MessageBox.Show(fs+" 파일 출력 완료");
             }
             catch (System.IO.IOException )
             {
-                MessageBox.Show("곡별콤보캐릭조합.xlsx 파일 접근불가. 사용중 아니에요?");
+                MessageBox.Show(fs + " 파일 접근불가. 사용중 아니에요?");
             }
 
             
         }
 
+        /// <summary>
+        /// 엑셀 출력용 속성 계산
+        /// </summary>
+        /// <param name="c1"></param>
+        /// <param name="chra_c_l"></param>
+        /// <param name="b1"></param>
+        /// <param name="d"></param>
         private static void SetComboArrToDic(Chra c1, List<Chra> chra_c_l, bool[] b1, Dictionary<string, bool[]> d)
         {
             bool[] b2;// = Enumerable.Repeat(false, time_song).ToArray();//콤보 유무
@@ -986,7 +1001,7 @@ namespace TAPSONIC_TOP_Lilly
             {
                 b2 = (bool[])b1.Clone();
                 SetComboArr(b2, c2);
-                d.Add(c1.name + "\n" + c2.name, b2);
+                d.Add(c1.name + "\n"+c1.att + "\n" + c2.name+ "\n" + c2.att, b2);
             }
         }
 
