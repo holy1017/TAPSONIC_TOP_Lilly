@@ -11,6 +11,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
+
+// 닷넷 코어 3.0 런타임이 필요합니다
+// https://dotnet.microsoft.com/download/dotnet-core/current/runtime
+
+// 소스 코드
+// https://github.com/holy1017/TAPSONIC_TOP_Lilly﻿
+
 namespace TAPSONIC_TOP_Lilly
 {
     public partial class Form1 : Form
