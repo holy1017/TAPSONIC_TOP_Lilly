@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,41 +27,45 @@ namespace TAPSONIC_TOP_Lilly
         static char[] split={ ',','\t',';'};
         
         static int time_px = 5;// 초당 가로 픽셀
+        static int time_song_max = 180;// 음악 최대 시간
         static int time_song = 180;// 음악 최대 시간
 
-        static int[] buff_v = Enumerable.Repeat(0, time_song).ToArray();//버프값. 만약 타입별로 한다면 이걸 분할해야함.
-        static int[] buff_t = Enumerable.Repeat(0, time_song).ToArray();//버프값 탭. 만약 타입별로 한다면 이걸 분할해야함.
-        static int[] buff_l = Enumerable.Repeat(0, time_song).ToArray();//버프값 롱. 만약 타입별로 한다면 이걸 분할해야함.
-        static int[] buff_s = Enumerable.Repeat(0, time_song).ToArray();//버프값 슬라. 만약 타입별로 한다면 이걸 분할해야함.
-        static int[] buff_f = Enumerable.Repeat(0, time_song).ToArray();//버프값 플릭. 만약 타입별로 한다면 이걸 분할해야함.
+        static int[] buff_v = Enumerable.Repeat(0, time_song_max).ToArray();//버프값. 만약 타입별로 한다면 이걸 분할해야함.
+        static int[] buff_t = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 탭. 만약 타입별로 한다면 이걸 분할해야함.
+        static int[] buff_l = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 롱. 만약 타입별로 한다면 이걸 분할해야함.
+        static int[] buff_s = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 슬라. 만약 타입별로 한다면 이걸 분할해야함.
+        static int[] buff_f = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 플릭. 만약 타입별로 한다면 이걸 분할해야함.
 
-        static int[] buff_va = Enumerable.Repeat(0, time_song).ToArray();//버프 기본값 및 콤보 적용
-        static int[] buff_ta = Enumerable.Repeat(0, time_song).ToArray();//버프값 탭. 만약 타입별로 한다면 이걸 분할해야함.
-        static int[] buff_la = Enumerable.Repeat(0, time_song).ToArray();//버프값 롱. 만약 타입별로 한다면 이걸 분할해야함.
-        static int[] buff_sa = Enumerable.Repeat(0, time_song).ToArray();//버프값 슬라. 만약 타입별로 한다면 이걸 분할해야함.
-        static int[] buff_fa = Enumerable.Repeat(0, time_song).ToArray();//버프값 플릭. 만약 타입별로 한다면 이걸 분할해야함.
-        static bool[] buff_c = Enumerable.Repeat(false, time_song).ToArray();//콤보 유무
+        static int[] buff_va = Enumerable.Repeat(0, time_song_max).ToArray();//버프 기본값 및 콤보 적용
+        static int[] buff_ta = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 탭. 만약 타입별로 한다면 이걸 분할해야함.
+        static int[] buff_la = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 롱. 만약 타입별로 한다면 이걸 분할해야함.
+        static int[] buff_sa = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 슬라. 만약 타입별로 한다면 이걸 분할해야함.
+        static int[] buff_fa = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 플릭. 만약 타입별로 한다면 이걸 분할해야함.
+        
+        static bool[] buff_c = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 유무
+        static int[] combo_cum = Enumerable.Repeat(0, time_song_max).ToArray();//각 시간별 콤보 갯수 누적
 
+        static int song_avg = 0;// 
         static int sum = 0;// 
         static int sum_t = 0;// 
         static int sum_l = 0;// 
         static int sum_s = 0;// 
         static int sum_f = 0;// 
-        static int cnt = 0;// 
+        static int combo_cnt = 0;// 임시 변수
 
-        static List<Chra> ca = new List<Chra>();//모든캐릭
-        static List<Chra> ct;//탭캐릭. 분류 코드로 자동 처리
-        static List<Chra> cl;//탭캐릭. 분류 코드로 자동 처리
-        static List<Chra> cs;//탭캐릭. 분류 코드로 자동 처리
-        static List<Chra> cp;//탭캐릭. 분류 코드로 자동 처리
+        static List<Chra> chra_a= new List<Chra>();//모든캐릭
+        static List<Chra> chra_t;//탭캐릭. 분류 코드로 자동 처리
+        static List<Chra> chra_l;//탭캐릭. 분류 코드로 자동 처리
+        static List<Chra> chra_s;//탭캐릭. 분류 코드로 자동 처리
+        static List<Chra> chra_f;//탭캐릭. 분류 코드로 자동 처리
 
-        static List<Song> so=new List<Song>();//음악 목록
+        static List<Song> song=new List<Song>();//음악 목록
         //Dictionary<string, List<Note>> openWith = new Dictionary<string, List<Note>>();
 
         static Font fnt = new Font("맑은 고딕", 16);
         //var fontf = new Font("맑은 고딕", 16, FontStyle.Regular, GraphicsUnit.Pixel);
 
-        static int grp_w = time_song * time_px;// 그래픽 가로 크기
+        static int grp_w = time_song_max * time_px;// 그래픽 가로 크기
         static int grp_h_div = 4;//그래픽 배율 감소
         static int grp_h = 150;// 그래픽 세로 크기
 
@@ -207,28 +212,28 @@ namespace TAPSONIC_TOP_Lilly
             SetSong();
 
             trackBar1.Maximum = 180;
-            trackBar1.Value = 120;
+            trackBar1.Value = song_avg;
             trackBar1.LargeChange = 1;
 
             // 콤보박스 세팅
 
-            comboBox1.DataSource = ct;
+            comboBox1.DataSource = chra_t;
             comboBox1.DisplayMember = "name";
             comboBox1.SelectedIndex = 0;
 
-            comboBox2.DataSource = cl;
+            comboBox2.DataSource = chra_l;
             comboBox2.DisplayMember = "name";
             comboBox2.SelectedIndex = 0;
 
-            comboBox3.DataSource = cs;
+            comboBox3.DataSource = chra_s;
             comboBox3.DisplayMember = "name";
             comboBox3.SelectedIndex = 0;
 
-            comboBox4.DataSource = cp;
+            comboBox4.DataSource = chra_f;
             comboBox4.DisplayMember = "name";
             comboBox4.SelectedIndex = 0;
 
-            comboBox5.DataSource = so;
+            comboBox5.DataSource = song;
             comboBox5.DisplayMember = "name";
             comboBox5.SelectedIndex = 0;
 
@@ -247,19 +252,19 @@ namespace TAPSONIC_TOP_Lilly
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ChraSelectedIndexChanged(sender, ct, label1);
+            ChraSelectedIndexChanged(sender, chra_t, label1);
         }
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ChraSelectedIndexChanged(sender, cl, label2);
+            ChraSelectedIndexChanged(sender, chra_l, label2);
         }
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ChraSelectedIndexChanged(sender, cs, label3);
+            ChraSelectedIndexChanged(sender, chra_s, label3);
         }
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ChraSelectedIndexChanged(sender, cp, label4);
+            ChraSelectedIndexChanged(sender, chra_f, label4);
         }
 
         private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
@@ -417,29 +422,29 @@ namespace TAPSONIC_TOP_Lilly
 
                         cl++;
 
-                        ca.Add(new Chra(s[0], att, type, buff, int.Parse(s[4]), int.Parse(s[5]), int.Parse(s[6])));
+                        chra_a.Add(new Chra(s[0], att, type, buff, int.Parse(s[4]), int.Parse(s[5]), int.Parse(s[6])));
 
-                        Debug.WriteLine("ca.Last:{0}", ca.Last());
+                        Debug.WriteLine("ca.Last:{0}", chra_a.Last());
                     }
                     catch (Exception e)
                     {
                         Debug.WriteLine(e);
                     }
-                    Debug.WriteLine("ca.Count:{0}", ca.Count);
+                    Debug.WriteLine("ca.Count:{0}", chra_a.Count);
                 }
 
             }
 
             // 정렬
-            ca.Sort(delegate (Chra x, Chra y)
+            chra_a.Sort(delegate (Chra x, Chra y)
             {
                 return x.name.CompareTo(y.name);
             });
 
-            ct = ca.Where(Chra => Chra.type == Type.tap).ToList();
-            cl = ca.Where(Chra => Chra.type == Type.@long).ToList();
-            cs = ca.Where(Chra => Chra.type == Type.slide).ToList();
-            cp = ca.Where(Chra => Chra.type == Type.Flick).ToList();
+            chra_t = chra_a.Where(Chra => Chra.type == Type.tap).ToList();
+            chra_l = chra_a.Where(Chra => Chra.type == Type.@long).ToList();
+            chra_s = chra_a.Where(Chra => Chra.type == Type.slide).ToList();
+            chra_f = chra_a.Where(Chra => Chra.type == Type.Flick).ToList();
         }
 
         /// <summary>
@@ -479,21 +484,22 @@ namespace TAPSONIC_TOP_Lilly
 
                         cl++;
 
-                        so.Add(new Song(s[0], att, int.Parse(s[2])));
-
-                        Debug.WriteLine("so.Last:{0}", so.Last());
+                        song.Add(new Song(s[0], att, int.Parse(s[2])));
+                        song_avg += int.Parse(s[2]);
+                        Debug.WriteLine("so.Last:{0}", song.Last());
                     }
                     catch (Exception e)
                     {
                         Debug.WriteLine(e);
                     }
-                    Debug.WriteLine("so.Count:{0}", so.Count);
+                    Debug.WriteLine("so.Count:{0}", song.Count);
+                    song_avg /= song.Count;
                 }
 
             }
 
             // 정렬
-            so.Sort(delegate (Song x, Song y)
+            song.Sort(delegate (Song x, Song y)
             {
                 return x.name.CompareTo(y.name);
             });
@@ -537,18 +543,23 @@ namespace TAPSONIC_TOP_Lilly
             sum_l = 0;
             sum_s = 0;
             sum_f = 0;
-            cnt = 0;
+
+            combo_cnt = 0;
+
             buff_va = Enumerable.Repeat(0, time_song).ToArray();
             buff_ta = Enumerable.Repeat(0, time_song).ToArray();
             buff_la = Enumerable.Repeat(0, time_song).ToArray();
             buff_sa = Enumerable.Repeat(0, time_song).ToArray();
             buff_fa = Enumerable.Repeat(0, time_song).ToArray();
+
             buff_v = Enumerable.Repeat(0, time_song).ToArray();
             buff_t = Enumerable.Repeat(0, time_song).ToArray();
             buff_l = Enumerable.Repeat(0, time_song).ToArray();
             buff_s = Enumerable.Repeat(0, time_song).ToArray();
             buff_f = Enumerable.Repeat(0, time_song).ToArray();
+
             buff_c = Enumerable.Repeat(false, time_song).ToArray();
+            combo_cum = Enumerable.Repeat(0, time_song).ToArray();//각 시간별 콤보 갯수 누적
 
             CharBuffCalcSub(comboBox1);
             CharBuffCalcSub(comboBox2);
@@ -570,21 +581,23 @@ namespace TAPSONIC_TOP_Lilly
                     buff_la[i] *= 2;
                     buff_sa[i] *= 2;
                     buff_fa[i] *= 2;
-                    cnt++;
+                    combo_cnt++;
                 }
                 sum_t += buff_ta[i];
                 sum_l += buff_la[i];
                 sum_s += buff_sa[i];
                 sum_f += buff_fa[i];
                 sum += buff_va[i];
-
+                combo_cum[i] = combo_cnt;
             }
             label5.Text = string.Format("{0}", sum);
+
             label6.Text = string.Format("{0:N2}", (double)sum_t / (double)time_song);
             label7.Text = string.Format("{0:N2}", (double)sum_l / (double)time_song);
             label8.Text = string.Format("{0:N2}", (double)sum_s / (double)time_song);
             label9.Text = string.Format("{0:N2}", (double)sum_f / (double)time_song);
-            label10.Text = string.Format("{0:N2}", (double)cnt / (double)time_song);
+
+            label10.Text = string.Format("{0:N2}", (double)combo_cnt / (double)time_song);
 
             print();
             Print2();
@@ -605,13 +618,14 @@ namespace TAPSONIC_TOP_Lilly
             switch (c.buff)
             {
                 case Buff.combo:
-                    for (int i = 0; i < time_song; i++)
-                    {
-                        if (i % (c.on + c.off) > c.off)
-                        {
-                            buff_c[i] = true;
-                        }
-                    }
+                    SetComboArr(buff_c, c);
+                    //for (int i = 0; i < time_song; i++)
+                    //{
+                    //    if (i % (c.on + c.off) > c.off)
+                    //    {
+                    //        buff_c[i] = true;
+                    //    }
+                    //}
                     break;
                 case Buff.buff:
                     BuffCul(c, ref buff_v);
@@ -868,6 +882,128 @@ namespace TAPSONIC_TOP_Lilly
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            List<Chra> chra_c_t= chra_t.Where(Chra => Chra.buff == Buff.combo).ToList();
+            List<Chra> chra_c_l= chra_l.Where(Chra => Chra.buff == Buff.combo).ToList();
+            List<Chra> chra_c_s= chra_s.Where(Chra => Chra.buff == Buff.combo).ToList();
+            List<Chra> chra_c_f= chra_f.Where(Chra => Chra.buff == Buff.combo).ToList();
+
+            Dictionary<string, bool[]> dchra = new Dictionary<string, bool[]>();            
+
+            bool[] b1;// = Enumerable.Repeat(false, time_song).ToArray();//콤보 유무
+
+            foreach (var c1 in chra_c_t)
+            {
+                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
+                SetComboArr(b1, c1);
+
+                SetComboArrToDic(c1, chra_c_l, b1, dchra );
+                SetComboArrToDic(c1, chra_c_s, b1, dchra );
+                SetComboArrToDic(c1, chra_c_f, b1, dchra );
+            }
+            foreach (var c1 in chra_c_l)
+            {
+                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
+                SetComboArr(b1, c1);
+
+                SetComboArrToDic(c1, chra_c_s, b1, dchra);
+                SetComboArrToDic(c1, chra_c_f, b1, dchra);
+            }
+            foreach (var c1 in chra_c_s)
+            {
+                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
+                SetComboArr(b1, c1);
+
+                SetComboArrToDic(c1, chra_c_f, b1, dchra);
+            }
+
+            DataTable dt = new DataTable("Table1");//DataTable 정의
+
+            // 칼럼 정의
+            DataColumn col = new DataColumn("곡이름", typeof(string));
+            dt.Columns.Add(col);
+            foreach (var c in dchra)
+            {
+                //col = new DataColumn(c.Key, typeof(string));
+                col = new DataColumn(c.Key, typeof(double));                
+                dt.Columns.Add(col);
+            }
+
+            int cnt;
+
+            // 곡별로 캐릭 효율
+            foreach (var s in song)
+            {
+                DataRow row = dt.NewRow();
+                row["곡이름"] = s.name;
+
+                foreach (var c in dchra)
+                {
+                    cnt = 0;
+                    for (int i = 0; i < s.time; i++)
+                    {
+                        if (c.Value[i])
+                        {
+                            cnt++;
+                        }
+                    }
+                    //row[c.Key] = string.Format("{0:N2}", (double)cnt / (double)s.time);
+                    row[c.Key] =  (double)cnt / (double)s.time;
+                }
+                dt.Rows.Add(row);
+            }
+
+            // 엑셀로 출력
+            //excel = new Microsoft.Office.Interop.Excel.Application();
+            //excelworkBook = excel.Workbooks.Add();
+            //excelSheet = (Microsoft.Office.Interop.Excel.Worksheet)excelworkBook.ActiveSheet;
+
+            XLWorkbook wb = new XLWorkbook();
+            IXLWorksheet ws= wb.Worksheets.Add(dt, "WorksheetName");
+            ws.Range(ws.Cell(2, 2), ws.Cell(song.Count+1, dchra.Count+1)).Style.NumberFormat.Format = "0.0%";
+
+            
+            try
+            {
+                wb.SaveAs("곡별콤보캐릭조합.xlsx");
+                MessageBox.Show("곡별콤보캐릭조합.xlsx 파일 출력 완료");
+            }
+            catch (System.IO.IOException )
+            {
+                MessageBox.Show("곡별콤보캐릭조합.xlsx 파일 접근불가. 사용중 아니에요?");
+            }
+
+            
+        }
+
+        private static void SetComboArrToDic(Chra c1, List<Chra> chra_c_l, bool[] b1, Dictionary<string, bool[]> d)
+        {
+            bool[] b2;// = Enumerable.Repeat(false, time_song).ToArray();//콤보 유무
+            foreach (var c2 in chra_c_l)
+            {
+                b2 = (bool[])b1.Clone();
+                SetComboArr(b2, c2);
+                d.Add(c1.name + "\n" + c2.name, b2);
+            }
+        }
+
+        /// <summary>
+        /// 받은 배열에 캐릭의 콤보 추가
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="c1"></param>
+        private static void SetComboArr(bool[] b1, Chra c1)
+        {
+            for (int i = 0; i < b1.Length; i++)
+            {
+                if (i % (c1.on + c1.off) > c1.off)
+                {
+                    b1[i] = true;
+                }
+            }
         }
     }
 }
