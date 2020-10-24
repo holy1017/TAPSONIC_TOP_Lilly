@@ -1118,7 +1118,7 @@ namespace TAPSONIC_TOP_Lilly
             {
                 b2 = (bool[])b1.Clone();
                 SetComboArr(b2, c2);
-                d.Add(new BindChra(c1, c2), b1);
+                d.Add(new BindChra(c1, c2), b2);
                 //d.Add(c1.name + "\n" + c1.att + "\n" + c2.name + "\n" + c2.att, b2);
             }
         }
