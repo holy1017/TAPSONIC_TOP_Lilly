@@ -886,40 +886,7 @@ namespace TAPSONIC_TOP_Lilly
 
         private void button1_Click(object sender, EventArgs e)
         {
-            List<Chra> chra_c_t= chra_t.Where(Chra => Chra.buff == Buff.combo).ToList();
-            List<Chra> chra_c_l= chra_l.Where(Chra => Chra.buff == Buff.combo).ToList();
-            List<Chra> chra_c_s= chra_s.Where(Chra => Chra.buff == Buff.combo).ToList();
-            List<Chra> chra_c_f= chra_f.Where(Chra => Chra.buff == Buff.combo).ToList();
-
-            Dictionary<string, bool[]> dchra = new Dictionary<string, bool[]>();            
-
-            bool[] b1;// = Enumerable.Repeat(false, time_song).ToArray();//콤보 유무
-
-            // 콤보 효율 계산
-            foreach (var c1 in chra_c_t)
-            {
-                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
-                SetComboArr(b1, c1);
-
-                SetComboArrToDic(c1, chra_c_l, b1, dchra );
-                SetComboArrToDic(c1, chra_c_s, b1, dchra );
-                SetComboArrToDic(c1, chra_c_f, b1, dchra );
-            }
-            foreach (var c1 in chra_c_l)
-            {
-                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
-                SetComboArr(b1, c1);
-
-                SetComboArrToDic(c1, chra_c_s, b1, dchra);
-                SetComboArrToDic(c1, chra_c_f, b1, dchra);
-            }
-            foreach (var c1 in chra_c_s)
-            {
-                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
-                SetComboArr(b1, c1);
-
-                SetComboArrToDic(c1, chra_c_f, b1, dchra);
-            }
+            Dictionary<string, bool[]> dchra = GetDicChar();
 
             // 테이블 처리
             DataTable dt = new DataTable("Table1");//DataTable 정의
@@ -956,7 +923,7 @@ namespace TAPSONIC_TOP_Lilly
                         }
                     }
                     //row[c.Key] = string.Format("{0:N2}", (double)cnt / (double)s.time);
-                    row[c.Key] =  (double)cnt / (double)s.time;
+                    row[c.Key] = (double)cnt / (double)s.time;
                 }
                 dt.Rows.Add(row);
             }
@@ -967,24 +934,65 @@ namespace TAPSONIC_TOP_Lilly
             //excelSheet = (Microsoft.Office.Interop.Excel.Worksheet)excelworkBook.ActiveSheet;
 
             XLWorkbook wb = new XLWorkbook();
-            IXLWorksheet ws= wb.Worksheets.Add(dt, "ByLilly");
-            ws.Range(ws.Cell(2, 4), ws.Cell(song.Count+1, dchra.Count+3)).Style.NumberFormat.Format = "0.0%";//퍼센트로 서식 지정
+            IXLWorksheet ws = wb.Worksheets.Add(dt, "ByLilly");
+            ws.Range(ws.Cell(2, 4), ws.Cell(song.Count + 1, dchra.Count + 3)).Style.NumberFormat.Format = "0.0%";//퍼센트로 서식 지정
             ws.Row(1).Style.Alignment.WrapText = true;
             ws.Row(1).AdjustToContents();
             ws.Row(1).Height = 90;
-                        
-            string fs= "곡별콤보캐릭조합" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+
+            string fs = "곡별콤보캐릭조합" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
             try
             {
                 wb.SaveAs(fs);
-                MessageBox.Show(fs+" 파일 출력 완료");
+                MessageBox.Show(fs + " 파일 출력 완료");
             }
-            catch (System.IO.IOException )
+            catch (System.IO.IOException)
             {
                 MessageBox.Show(fs + " 파일 접근불가. 사용중 아니에요?");
             }
 
-            
+
+
+        }
+
+        private static Dictionary<string, bool[]> GetDicChar()
+        {
+            List<Chra> chra_c_t = chra_t.Where(Chra => Chra.buff == Buff.combo).ToList();
+            List<Chra> chra_c_l = chra_l.Where(Chra => Chra.buff == Buff.combo).ToList();
+            List<Chra> chra_c_s = chra_s.Where(Chra => Chra.buff == Buff.combo).ToList();
+            List<Chra> chra_c_f = chra_f.Where(Chra => Chra.buff == Buff.combo).ToList();
+
+            Dictionary<string, bool[]> dchra = new Dictionary<string, bool[]>();
+
+            bool[] b1;// = Enumerable.Repeat(false, time_song).ToArray();//콤보 유무
+
+            // 콤보 효율 계산
+            foreach (var c1 in chra_c_t)
+            {
+                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
+                SetComboArr(b1, c1);
+
+                SetComboArrToDic(c1, chra_c_l, b1, dchra);
+                SetComboArrToDic(c1, chra_c_s, b1, dchra);
+                SetComboArrToDic(c1, chra_c_f, b1, dchra);
+            }
+            foreach (var c1 in chra_c_l)
+            {
+                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
+                SetComboArr(b1, c1);
+
+                SetComboArrToDic(c1, chra_c_s, b1, dchra);
+                SetComboArrToDic(c1, chra_c_f, b1, dchra);
+            }
+            foreach (var c1 in chra_c_s)
+            {
+                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
+                SetComboArr(b1, c1);
+
+                SetComboArrToDic(c1, chra_c_f, b1, dchra);
+            }
+
+            return dchra;
         }
 
         /// <summary>
@@ -1020,5 +1028,140 @@ namespace TAPSONIC_TOP_Lilly
                 }
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Dictionary<BindChra, bool[]> dchra = GetDicChar2();
+
+            // 테이블 처리
+            DataTable dt = new DataTable("Table1");//DataTable 정의
+
+            // 칼럼 정의
+            dt.Columns.Add(new DataColumn("곡이름", typeof(string)));
+            dt.Columns.Add(new DataColumn("곡속성", typeof(string)));
+            dt.Columns.Add(new DataColumn("곡시간", typeof(int)));
+            dt.Columns.Add(new DataColumn("캐릭1", typeof(string)));
+            dt.Columns.Add(new DataColumn("속성1", typeof(string)));
+            dt.Columns.Add(new DataColumn("캐릭2", typeof(string)));
+            dt.Columns.Add(new DataColumn("속성2", typeof(string)));
+            dt.Columns.Add(new DataColumn("효율", typeof(double)));
+
+            int cnt;
+            DataRow row;
+
+            // 곡별로 캐릭 효율
+            foreach (var s in song)
+            {
+                foreach (var c in dchra)
+                {
+                    row = dt.NewRow();
+
+                    row["곡이름"] = s.name;
+                    row["곡속성"] = s.att;
+                    row["곡시간"] = s.time;
+                    row["캐릭1"] = c.Key.c1.name;
+                    row["속성1"] = c.Key.c1.att;
+                    row["캐릭2"] = c.Key.c2.name;
+                    row["속성2"] = c.Key.c2.att;
+
+                    cnt = 0;
+                    for (int i = 0; i < s.time; i++)
+                    {
+                        if (c.Value[i])
+                        {
+                            cnt++;
+                        }
+                    }
+                    //row[c.Key] = string.Format("{0:N2}", (double)cnt / (double)s.time);
+                    row["효율"] = (double)cnt / (double)s.time;
+
+                    dt.Rows.Add(row);
+                }
+            }
+
+            XLWorkbook wb = new XLWorkbook();
+            IXLWorksheet ws = wb.Worksheets.Add(dt, "ByLilly");
+            ws.Column(8).Style.NumberFormat.Format = "0.0%";//퍼센트로 서식 지정
+            //ws.Column(8).Style.NumberFormat.Format = "0.0%";//퍼센트로 서식 지정
+            //ws.Row(1).Style.Alignment.WrapText = true;
+            //ws.Row(1).AdjustToContents();
+            //ws.Row(1).Height = 90;
+
+            string fs = "곡별콤보캐릭조합" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+            try
+            {
+                wb.SaveAs(fs);
+                MessageBox.Show(fs + " 파일 출력 완료");
+            }
+            catch (System.IO.IOException)
+            {
+                MessageBox.Show(fs + " 파일 접근불가. 사용중 아니에요?");
+            }
+        }
+
+        struct BindChra
+        {
+            public Chra c1;
+            public Chra c2;
+
+            public BindChra(Chra c1, Chra c2)
+            {
+                this.c1 = c1;
+                this.c2 = c2;
+            }
+        }
+
+        private static void SetComboArrToDic(Chra c1, List<Chra> chra_c_l, bool[] b1, Dictionary<BindChra, bool[]> d)
+        {
+            bool[] b2;// = Enumerable.Repeat(false, time_song).ToArray();//콤보 유무
+            foreach (var c2 in chra_c_l)
+            {
+                b2 = (bool[])b1.Clone();
+                SetComboArr(b2, c2);
+                d.Add(new BindChra(c1, c2), b1);
+                //d.Add(c1.name + "\n" + c1.att + "\n" + c2.name + "\n" + c2.att, b2);
+            }
+        }
+
+        private static Dictionary<BindChra, bool[]> GetDicChar2()
+        {
+            List<Chra> chra_c_t = chra_t.Where(Chra => Chra.buff == Buff.combo).ToList();
+            List<Chra> chra_c_l = chra_l.Where(Chra => Chra.buff == Buff.combo).ToList();
+            List<Chra> chra_c_s = chra_s.Where(Chra => Chra.buff == Buff.combo).ToList();
+            List<Chra> chra_c_f = chra_f.Where(Chra => Chra.buff == Buff.combo).ToList();
+
+            Dictionary<BindChra, bool[]> dchra = new Dictionary<BindChra, bool[]>();
+
+            bool[] b1;// = Enumerable.Repeat(false, time_song).ToArray();//콤보 유무
+
+            // 콤보 효율 계산
+            foreach (var c1 in chra_c_t)
+            {
+                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
+                SetComboArr(b1, c1);
+
+                SetComboArrToDic(c1, chra_c_l, b1, dchra);
+                SetComboArrToDic(c1, chra_c_s, b1, dchra);
+                SetComboArrToDic(c1, chra_c_f, b1, dchra);
+            }
+            foreach (var c1 in chra_c_l)
+            {
+                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
+                SetComboArr(b1, c1);
+
+                SetComboArrToDic(c1, chra_c_s, b1, dchra);
+                SetComboArrToDic(c1, chra_c_f, b1, dchra);
+            }
+            foreach (var c1 in chra_c_s)
+            {
+                b1 = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 
+                SetComboArr(b1, c1);
+
+                SetComboArrToDic(c1, chra_c_f, b1, dchra);
+            }
+
+            return dchra;
+        }
+
     }
 }
