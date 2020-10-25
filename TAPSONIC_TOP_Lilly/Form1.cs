@@ -35,17 +35,19 @@ namespace TAPSONIC_TOP_Lilly
         static int[] buff_l = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 롱. 만약 타입별로 한다면 이걸 분할해야함.
         static int[] buff_s = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 슬라. 만약 타입별로 한다면 이걸 분할해야함.
         static int[] buff_f = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 플릭. 만약 타입별로 한다면 이걸 분할해야함.
+        static int[] buff_a = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 플릭. 올버프 별도 계산용
 
         static int[] buff_va = Enumerable.Repeat(0, time_song_max).ToArray();//버프 기본값 및 콤보 적용
         static int[] buff_ta = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 탭. 만약 타입별로 한다면 이걸 분할해야함.
         static int[] buff_la = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 롱. 만약 타입별로 한다면 이걸 분할해야함.
         static int[] buff_sa = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 슬라. 만약 타입별로 한다면 이걸 분할해야함.
         static int[] buff_fa = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 플릭. 만약 타입별로 한다면 이걸 분할해야함.
-        
+        static int[] buff_aa = Enumerable.Repeat(0, time_song_max).ToArray();//버프값 플릭. 올버프 별도 계산용
+
         static bool[] buff_c = Enumerable.Repeat(false, time_song_max).ToArray();//콤보 유무
         static int[] combo_cum = Enumerable.Repeat(0, time_song_max).ToArray();//각 시간별 콤보 갯수 누적
 
-        static int song_avg = 0;// 
+        static int song_avg = 120;// trackBar1.Minimum = 1;//때문에 적당히 값 입력
         static int sum = 0;// 
         static int sum_t = 0;// 
         static int sum_l = 0;// 
@@ -211,8 +213,9 @@ namespace TAPSONIC_TOP_Lilly
             SetChra();
             SetSong();
 
+            trackBar1.Minimum = 1;
             trackBar1.Maximum = 180;
-            trackBar1.Value = song_avg;
+            //trackBar1.Value = song_avg;
             trackBar1.LargeChange = 1;
 
             // 콤보박스 세팅
@@ -460,12 +463,12 @@ namespace TAPSONIC_TOP_Lilly
                     {
                         string[] s = sr.ReadLine().Split(split);        // Split() 메서드를 이용하여 ',' 구분하여 잘라냄
 
-                        Debug.Write(s.Length, ";\t");
-                        for (int i = 0; i < s.Length; i++)
-                        {
-                            Debug.Write(s[i], "\t");
-                        }
-                        Debug.WriteLine(";\t");
+                        //Debug.Write(s.Length, ";\t");
+                        //for (int i = 0; i < s.Length; i++)
+                        //{
+                        //    Debug.Write(s[i], "\t");
+                        //}
+                        //Debug.WriteLine(";\t");
 
                         int cl = 0;
 
@@ -486,13 +489,13 @@ namespace TAPSONIC_TOP_Lilly
 
                         song.Add(new Song(s[0], att, int.Parse(s[2])));
                         song_avg += int.Parse(s[2]);
-                        Debug.WriteLine("so.Last:{0}", song.Last());
+                        //Debug.WriteLine("so.Last:{0}", song.Last());
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLine(e);
+                        //Debug.WriteLine(e);
                     }
-                    Debug.WriteLine("so.Count:{0}", song.Count);
+                    //Debug.WriteLine("so.Count:{0}", song.Count);
                     song_avg /= song.Count;
                 }
 
@@ -551,12 +554,14 @@ namespace TAPSONIC_TOP_Lilly
             buff_la = Enumerable.Repeat(0, time_song).ToArray();
             buff_sa = Enumerable.Repeat(0, time_song).ToArray();
             buff_fa = Enumerable.Repeat(0, time_song).ToArray();
+            buff_aa = Enumerable.Repeat(0, time_song).ToArray();
 
             buff_v = Enumerable.Repeat(0, time_song).ToArray();
             buff_t = Enumerable.Repeat(0, time_song).ToArray();
             buff_l = Enumerable.Repeat(0, time_song).ToArray();
             buff_s = Enumerable.Repeat(0, time_song).ToArray();
             buff_f = Enumerable.Repeat(0, time_song).ToArray();
+            buff_a = Enumerable.Repeat(0, time_song).ToArray();
 
             buff_c = Enumerable.Repeat(false, time_song).ToArray();
             combo_cum = Enumerable.Repeat(0, time_song).ToArray();//각 시간별 콤보 갯수 누적
@@ -568,11 +573,12 @@ namespace TAPSONIC_TOP_Lilly
 
             for (int i = 0; i < time_song; i++)
             {
-                buff_va[i] = buff_v[i] + 100;
-                buff_ta[i] = buff_t[i] + 100;
-                buff_la[i] = buff_l[i] + 100;
-                buff_sa[i] = buff_s[i] + 100;
-                buff_fa[i] = buff_f[i] + 100;
+                buff_va[i] = buff_v[i] + buff_a[i] + 100;
+                buff_ta[i] = buff_t[i] + buff_a[i] + 100;
+                buff_la[i] = buff_l[i] + buff_a[i] + 100;
+                buff_sa[i] = buff_s[i] + buff_a[i] + 100;
+                buff_fa[i] = buff_f[i] + buff_a[i] + 100;
+                buff_aa[i] = buff_a[i] + 100;
 
                 if (buff_c[i])
                 {
@@ -581,6 +587,7 @@ namespace TAPSONIC_TOP_Lilly
                     buff_la[i] *= 2;
                     buff_sa[i] *= 2;
                     buff_fa[i] *= 2;
+                    buff_aa[i] *= 2;
                     combo_cnt++;
                 }
                 sum_t += buff_ta[i];
@@ -631,11 +638,12 @@ namespace TAPSONIC_TOP_Lilly
                     BuffCul(c, ref buff_v);
                     break;
                 case Buff.buff_a:
-                    BuffCul(c, ref buff_t);
-                    BuffCul(c, ref buff_l);
-                    BuffCul(c, ref buff_s);
-                    BuffCul(c, ref buff_f);
+                    //BuffCul(c, ref buff_t);
+                    //BuffCul(c, ref buff_l);
+                    //BuffCul(c, ref buff_s);
+                    //BuffCul(c, ref buff_f);
                     BuffCul(c, ref buff_v);
+                    BuffCul(c, ref buff_a);
                     break;
                 case Buff.buff_t:
                     BuffCul(c, ref buff_t);
@@ -708,10 +716,11 @@ namespace TAPSONIC_TOP_Lilly
             {
                 //Console.WriteLine("{0}\t{1}\t{2}\t{3}\t", buff_ta[i], buff_la[i],  buff_sa[i], buff_fa[i]);
                 //Debug.WriteLine("{0}\t{1}\t{2}\t{3}\t", buff_ta[i], buff_la[i],  buff_sa[i], buff_fa[i]);
-                graphics2.FillRectangle(GetChraBursh(buff_c[i], buff_t[i] > 0), i * (time_px), 0, time_px - 1, 19);
-                graphics2.FillRectangle(GetChraBursh(buff_c[i], buff_l[i] > 0), i * (time_px), 20, time_px - 1, 19);
-                graphics2.FillRectangle(GetChraBursh(buff_c[i], buff_s[i] > 0), i * (time_px), 40, time_px - 1, 19);
-                graphics2.FillRectangle(GetChraBursh(buff_c[i], buff_f[i] > 0), i * (time_px), 60, time_px - 1, 19);
+                //Debug.WriteLine("{0}\t{1}\t{2}\t{3}\t", buff_t[i], buff_l[i],  buff_s[i], buff_f[i]);
+                graphics2.FillRectangle(GetChraBursh( buff_t ,i), i * (time_px), 0, time_px - 1, 19);
+                graphics2.FillRectangle(GetChraBursh( buff_l ,i), i * (time_px), 20, time_px - 1, 19);
+                graphics2.FillRectangle(GetChraBursh( buff_s ,i), i * (time_px), 40, time_px - 1, 19);
+                graphics2.FillRectangle(GetChraBursh( buff_f ,i), i * (time_px), 60, time_px - 1, 19);
                 if (buff_c[i])
                 {
                     graphics2.FillRectangle(Brushes.Yellow, i * (time_px), 80, time_px - 1, 19);
@@ -727,12 +736,30 @@ namespace TAPSONIC_TOP_Lilly
         /// <param name="c">콤보 여부</param>
         /// <param name="b">버프 여부</param>
         /// <returns></returns>
-        private Brush GetChraBursh(bool c, bool b)
+        private Brush GetChraBursh(int[] buff,int i)
         {
+            bool c = buff_c[i];
+            bool b = buff[i]>0;
+            bool a = buff_a[i]>0;
+
             //solidBrush.Color = Color.FromArgb(r, g, b);
-            if (c && b) return Brushes.LightBlue;
-            if (c && !b) return Brushes.Yellow;
-            if (!c && b) return Brushes.GreenYellow;
+            if (c)
+            {
+                if (a)
+                {
+                    if (b) return Brushes.LightYellow;
+
+                    return Brushes.YellowGreen;
+                }
+                if (b) return Brushes.LightGoldenrodYellow;
+                return Brushes.Yellow;
+            }
+            if (a)
+            {
+                if (b) return Brushes.LightGreen;
+                return Brushes.Green;
+            }
+            if (b) return Brushes.LightBlue;
             return Brushes.Black;
         }
 
